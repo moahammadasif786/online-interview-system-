@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Interview Machine</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <h1>AI Interview Machine</h1>
+          <p>Upload your resume, answer voice-driven interview questions, and generate an owner-only review summary.</p>
+        </div>
+        <div class="language-select">
+          <label for="languageSelector">Language</label>
+          <select id="languageSelector"></select>
+        </div>
+      </header>
+
+      <main class="content-card">
+        <section class="section-block" id="roleSelectionSection">
+          <h2>Select Interview Role</h2>
+          <p style="color: #94a3b8; margin-bottom: 20px;">Choose the position you're interviewing for:</p>
+          <div id="roleGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+            <!-- Roles will be loaded here -->
+          </div>
+          <button id="continueAfterRoleBtn" class="btn btn-primary" style="width: 100%; display: none;">Continue to Resume</button>
+        </section>
+
+        <section class="section-block hidden" id="resumeSection">
+          <h2>Resume</h2>
+          <input id="candidateName" placeholder="Candidate name" />
+          <input id="candidateEmail" placeholder="Email address" style="margin-top: 10px;" />
+
+          <label for="resumeFile" class="file-label">Upload resume PDF or image</label>
+          <input id="resumeFile" type="file" accept=".pdf,image/*" />
+          <p class="file-help" id="fileHint">Use a PDF or image file to extract resume text automatically.</p>
+
+          <textarea id="resumeText" placeholder="Paste your resume text here..."></textarea>
+
+          <div class="field-group" style="display:grid; gap:12px; margin-top:12px;">
+            <label for="questionCount">Question count</label>
+            <select id="questionCount">
+              <option value="5">5 questions</option>
+              <option value="6">6 questions</option>
+              <option value="7" selected>7 questions</option>
+              <option value="8">8 questions</option>
+              <option value="9">9 questions</option>
+              <option value="10">10 questions</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="display:grid; gap:12px; margin-top:12px;">
+            <label for="voiceStyle">Voice style</label>
+            <select id="voiceStyle">
+              <option value="female">Polite female</option>
+              <option value="soft">Soft conversational</option>
+              <option value="default">Default speaker</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="display:grid; gap:12px; margin-top:12px;">
+            <label for="skillLevel">Your skill level</label>
+            <select id="skillLevel">
+              <option value="fresher">Fresher (0-1 year)</option>
+              <option value="mid-level" selected>Mid-level (1-3 years)</option>
+              <option value="senior">Senior (3-7 years)</option>
+              <option value="expert">Expert (7+ years)</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="display:grid; gap:12px; margin-top:12px;">
+            <label for="difficulty">Question difficulty</label>
+            <select id="difficulty">
+              <option value="easy">Easy (Basics)</option>
+              <option value="medium" selected>Medium (Intermediate)</option>
+              <option value="hard">Hard (Advanced)</option>
+              <option value="mixed">Mixed difficulty</option>
+            </select>
+          </div>
+
+          <button id="startButton" class="btn btn-primary">Start Interview</button>
+        </section>
+
+        <section class="section-block hidden" id="questionSection">
+          <div class="question-header">
+            <span id="questionCounter"></span>
+            <span id="timerBadge">02:00</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressInner"></div>
+          </div>
+          <h2 id="currentQuestion"></h2>
+          <div class="analytics-layout">
+            <div class="camera-card">
+              <video id="cameraPreview" autoplay muted playsinline></video>
+              <div class="camera-overlay">
+                <span id="currentEmotion">Emotion: Waiting</span>
+                <span id="confidenceStatus">Medium Confidence</span>
+              </div>
+            </div>
+            <div class="analytics-panel">
+              <div class="metric-row">
+                <span>Confidence Score</span>
+                <strong id="confidenceScore">0%</strong>
+                <div class="meter"><div id="confidenceMeter"></div></div>
+              </div>
+              <div class="metric-row">
+                <span>Stress Meter</span>
+                <strong id="stressScore">0%</strong>
+                <div class="meter stress"><div id="stressMeter"></div></div>
+              </div>
+              <div class="analytics-grid">
+                <div><span>Eye Contact</span><strong id="eyeContactScore">0%</strong></div>
+                <div><span>Voice Stability</span><strong id="voiceStabilityScore">0%</strong></div>
+                <div><span>Blink Count</span><strong id="blinkCount">0</strong></div>
+                <div><span>Blink Rate</span><strong id="blinkRate">0/min</strong></div>
+                <div><span>Speaking Speed</span><strong id="speakingSpeed">0 wpm</strong></div>
+                <div><span>Nervousness</span><strong id="nervousnessLevel">Calm</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="answer-panel">
+            <textarea id="answerText" placeholder="Voice answer will appear here..."></textarea>
+            <div class="action-row">
+              <button id="speakButton" class="btn btn-secondary">Start Voice Answer</button>
+              <button id="nextButton" class="btn btn-primary">Next Question</button>
+            </div>
+          </div>
+          <p id="statusText" class="status-message"></p>
+        </section>
+
+        <section class="section-block hidden" id="summarySection">
+          <h2>Interview Complete</h2>
+          <p id="thankYouText"></p>
+          <div class="review-card" id="reviewSummary"></div>
+        </section>
+
+        <section class="section-block" id="ownerSection">
+          <h2>Owner Review Access</h2>
+          <input id="ownerPasscode" type="password" placeholder="Owner passcode" />
+          <button id="loadReviewsButton" class="btn btn-primary">Load reviews</button>
+          <div id="ownerMessage" class="status-message"></div>
+          <div id="ownerReviews"></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const languages = {{ languages | tojson }};
+      const uiText = {{ ui_text | tojson }};
+    </script>
+    <script src="/static/main.js"></script>
+  </body>
+</html>

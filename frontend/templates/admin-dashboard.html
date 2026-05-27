@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Interview System</title>
+    <link rel="stylesheet" href="/static/admin-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>Interview System</h2>
+                <p>Admin Panel</p>
+            </div>
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </a>
+                <a href="#candidates" class="nav-link" data-section="candidates">
+                    <span class="icon">👥</span> Candidates
+                </a>
+                <a href="#analytics" class="nav-link" data-section="analytics">
+                    <span class="icon">📈</span> Analytics
+                </a>
+                <a href="#settings" class="nav-link" data-section="settings">
+                    <span class="icon">⚙️</span> Settings
+                </a>
+            </nav>
+            <div class="user-info">
+                <p id="adminName">Admin</p>
+                <button id="logoutBtn" class="logout-btn">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <input type="text" id="searchBox" placeholder="Search candidates..." class="search-box">
+                    <div class="timestamp" id="timestamp"></div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Candidates</h3>
+                        <p class="stat-number" id="totalCandidates">0</p>
+                        <span class="stat-label">All submissions</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completed Interviews</h3>
+                        <p class="stat-number" id="completedInterviews">0</p>
+                        <span class="stat-label">Finished tests</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Selected for HR</h3>
+                        <p class="stat-number" id="selectedForHR">0</p>
+                        <span class="stat-label">Moving forward</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rejected</h3>
+                        <p class="stat-number" id="rejected">0</p>
+                        <span class="stat-label">Not selected</span>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Average Confidence Score</h3>
+                        <canvas id="confidenceChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Role Distribution</h3>
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Candidates Section -->
+            <section id="candidates" class="content-section">
+                <div class="candidates-toolbar">
+                    <div class="filters">
+                        <select id="roleFilter" class="filter-select">
+                            <option value="">All Roles</option>
+                            <option value="python_dev">Python Developer</option>
+                            <option value="web_dev">Web Developer</option>
+                            <option value="data_analyst">Data Analyst</option>
+                            <option value="java_dev">Java Developer</option>
+                            <option value="ml_engineer">AI/ML Engineer</option>
+                            <option value="frontend_dev">Frontend Developer</option>
+                            <option value="backend_dev">Backend Developer</option>
+                            <option value="sql_dev">SQL Developer</option>
+                            <option value="devops">DevOps Engineer</option>
+                            <option value="fullstack">Full Stack Developer</option>
+                        </select>
+                        <input type="number" id="scoreFilter" placeholder="Min Score (0-10)" class="filter-input" min="0" max="10">
+                        <button id="applyFiltersBtn" class="btn btn-secondary">Apply Filters</button>
+                    </div>
+                </div>
+
+                <div class="candidates-list" id="candidatesList">
+                    <p class="loading">Loading candidates...</p>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Performance Metrics</h3>
+                        <div id="performanceMetrics">Loading...</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Conversion Funnel</h3>
+                        <div id="conversionFunnel">Loading...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="content-section">
+                <div class="settings-card">
+                    <h3>Admin Settings</h3>
+                    <form id="settingsForm">
+                        <label>Email Notifications</label>
+                        <input type="checkbox" id="emailNotifications" checked>
+                        <label>Auto-save Enabled</label>
+                        <input type="checkbox" id="autoSave" checked>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Candidate Detail Modal -->
+    <div id="candidateModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <div id="candidateDetailContent">Loading...</div>
+        </div>
+    </div>
+
+    <script src="/static/admin-dashboard.js"></script>
+</body>
+</html>
